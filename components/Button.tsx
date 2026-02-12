@@ -9,6 +9,7 @@ interface ButtonProps {
   className?: string;
   type?: 'button' | 'submit' | 'reset';
   fullWidth?: boolean;
+  disabled?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({ 
@@ -18,9 +19,10 @@ const Button: React.FC<ButtonProps> = ({
   onClick, 
   className = '', 
   type = 'button',
-  fullWidth = false
+  fullWidth = false,
+  disabled = false
 }) => {
-  // Added rounded-lg to baseStyles
+  // Base styles including transition and disabled state styling
   const baseStyles = "inline-flex items-center justify-center px-6 py-3 font-semibold text-sm uppercase tracking-wider transition-all duration-300 transform active:scale-95 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed border rounded-lg";
   
   const variants = {
@@ -42,7 +44,12 @@ const Button: React.FC<ButtonProps> = ({
   }
 
   return (
-    <button type={type} onClick={onClick} className={combinedClasses}>
+    <button 
+      type={type} 
+      onClick={onClick} 
+      className={combinedClasses}
+      disabled={disabled}
+    >
       {children}
     </button>
   );
