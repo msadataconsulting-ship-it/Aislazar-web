@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import Section from '../components/Section';
 import Button from '../components/Button';
@@ -6,14 +7,7 @@ import {
   Phone, 
   Mail, 
   MapPin, 
-  Clock, 
-  User, 
-  Building2, 
-  FileText, 
-  Send, 
-  CheckCircle, 
-  Briefcase, 
-  ChevronDown 
+  CheckCircle
 } from 'lucide-react';
 
 const Contact: React.FC = () => {
@@ -39,17 +33,14 @@ const Contact: React.FC = () => {
     setIsSubmitting(true);
     setError(null);
 
-    // Los valores de SUPABASE_URL y ANON_KEY normalmente vendrían de variables de entorno
-    // Para este ejemplo de despliegue directo, podrías configurarlas aquí o vía fetch a un endpoint.
-    // Aquí implementamos la lógica de envío real a Supabase vía REST API
-    
     try {
-      const SUPABASE_URL = (window as any)._env_?.SUPABASE_URL || '';
-      const SUPABASE_KEY = (window as any)._env_?.SUPABASE_ANON_KEY || '';
+      // Fixed: Using type assertion to 'any' for import.meta to bypass TypeScript error when 'env' is not defined on the type.
+      // Vite uses import.meta.env for environment variables at build time.
+      const SUPABASE_URL = (import.meta as any).env.VITE_SUPABASE_URL;
+      const SUPABASE_KEY = (import.meta as any).env.VITE_SUPABASE_ANON_KEY;
 
-      // Si no hay variables configuradas, simulamos éxito para no romper la UX
-      if (!SUPABASE_URL) {
-        console.warn("Supabase no configurado. Simulando envío...");
+      if (!SUPABASE_URL || !SUPABASE_KEY) {
+        console.warn("Supabase no configurado en Vercel. Simulando envío para demostración...");
         await new Promise(resolve => setTimeout(resolve, 1500));
         setSubmitted(true);
         return;

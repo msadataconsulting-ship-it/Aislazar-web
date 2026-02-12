@@ -2,7 +2,7 @@
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" type="image/svg+xml" href="https://res.cloudinary.com/dbk68wsnu/image/upload/v1770492910/Logo_Aisla_Zar_nx9yu2.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AISLA-ZAR S.A. | Soluciones integrales de aislaciones térmicas</title>
     <meta name="description" content="Empresa líder en aislación térmica industrial, andamios y tracing eléctrico para grandes industrias." />
@@ -32,24 +32,35 @@
         font-family: 'Inter', sans-serif;
         background-color: #ffffff;
         color: #231F20;
+        margin: 0;
       }
       .scroll-smooth {
         scroll-behavior: smooth;
+      }
+      /* Prevenir flash de contenido no cargado */
+      #root:empty {
+        background: #231f20;
+        height: 100vh;
+        width: 100vw;
       }
     </style>
   <script type="importmap">
 {
   "imports": {
-    "react": "https://esm.sh/react@^19.2.4",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.4",
+    "vite": "https://esm.sh/vite@^7.3.1",
     "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
-    "react/": "https://esm.sh/react@^19.2.4/",
     "lucide-react": "https://esm.sh/lucide-react@^0.563.0",
-    "react-router-dom": "https://esm.sh/react-router-dom@^7.13.0"
+    "react-router-dom": "https://esm.sh/react-router-dom@^7.13.0",
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "react": "https://esm.sh/react@^19.2.4"
   }
 }
 </script>
 </head>
   <body>
     <div id="root"></div>
+    <!-- Script de entrada crítico para que la web no cargue en blanco -->
+    <script type="module" src="/index.tsx"></script>
   </body>
 </html>
