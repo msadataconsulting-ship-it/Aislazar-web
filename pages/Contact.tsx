@@ -7,7 +7,8 @@ import {
   Phone, 
   Mail, 
   MapPin, 
-  CheckCircle
+  CheckCircle,
+  AlertTriangle
 } from 'lucide-react';
 
 const Contact: React.FC = () => {
@@ -33,19 +34,18 @@ const Contact: React.FC = () => {
     setIsSubmitting(true);
     setError(null);
 
+    const SUPABASE_URL = (import.meta as any).env.VITE_SUPABASE_URL;
+    const SUPABASE_KEY = (import.meta as any).env.VITE_SUPABASE_ANON_KEY;
+
+    // Validación de configuración
+    if (!SUPABASE_URL || !SUPABASE_KEY) {
+      setIsSubmitting(false);
+      setError("Error de configuración: Las llaves de Supabase no están definidas en las variables de entorno de Vercel.");
+      console.error("Faltan VITE_SUPABASE_URL o VITE_SUPABASE_ANON_KEY");
+      return;
+    }
+
     try {
-      // Fixed: Using type assertion to 'any' for import.meta to bypass TypeScript error when 'env' is not defined on the type.
-      // Vite uses import.meta.env for environment variables at build time.
-      const SUPABASE_URL = (import.meta as any).env.VITE_SUPABASE_URL;
-      const SUPABASE_KEY = (import.meta as any).env.VITE_SUPABASE_ANON_KEY;
-
-      if (!SUPABASE_URL || !SUPABASE_KEY) {
-        console.warn("Supabase no configurado en Vercel. Simulando envío para demostración...");
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        setSubmitted(true);
-        return;
-      }
-
       const response = await fetch(`${SUPABASE_URL}/rest/v1/contactos`, {
         method: 'POST',
         headers: {
@@ -55,8 +55,8 @@ const Contact: React.FC = () => {
           'Prefer': 'return=minimal'
         },
         body: JSON.stringify({
-          nombre: formData.name,
-          empresa: formData.company,
+          nombre: formData.name,      // Verifica que esta columna exista en Supabase
+          empresa: formData.company,  // Verifica que esta columna exista en Supabase
           email: formData.email,
           telefono: formData.phone,
           servicio: formData.service,
@@ -64,13 +64,24 @@ const Contact: React.FC = () => {
         })
       });
 
-      if (!response.ok) throw new Error('Error al enviar el mensaje');
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.error("Error de Supabase:", response.status, errorData);
+        
+        if (response.status === 401 || response.status === 403) {
+          throw new Error('Permiso denegado. Revisa las políticas RLS en Supabase.');
+        } else if (response.status === 400) {
+          throw new Error('Error de esquema. Revisa que los nombres de las columnas coincidan con los de la base de datos.');
+        } else {
+          throw new Error(`Error del servidor (${response.status})`);
+        }
+      }
 
       setSubmitted(true);
       window.scrollTo({ top: 0, behavior: 'smooth' });
-    } catch (err) {
-      console.error(err);
-      setError("Hubo un problema al enviar su consulta. Por favor, intente nuevamente.");
+    } catch (err: any) {
+      console.error("Detalle del error:", err);
+      setError(err.message || "Hubo un problema al enviar su consulta. Por favor, intente nuevamente.");
     } finally {
       setIsSubmitting(false);
     }
@@ -166,7 +177,12 @@ const Contact: React.FC = () => {
                 <p className="text-gray-500">Complete el formulario y un asesor técnico se comunicará con usted.</p>
               </div>
 
-              {error && <div className="mb-6 p-4 bg-red-50 text-red-600 rounded-xl text-sm font-medium">{error}</div>}
+              {error && (
+                <div className="mb-6 p-4 bg-red-50 border border-red-100 text-red-600 rounded-xl flex items-start gap-3">
+                  <AlertTriangle className="flex-shrink-0 mt-0.5" size={18} />
+                  <div className="text-sm font-medium">{error}</div>
+                </div>
+              )}
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
