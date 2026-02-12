@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Section from '../components/Section';
 import Button from '../components/Button';
@@ -34,18 +33,16 @@ const Contact: React.FC = () => {
     setIsSubmitting(true);
     setError(null);
 
-    const SUPABASE_URL = (import.meta as any).env.VITE_SUPABASE_URL;
-    const SUPABASE_KEY = (import.meta as any).env.VITE_SUPABASE_ANON_KEY;
-
-    // Validación de configuración
-    if (!SUPABASE_URL || !SUPABASE_KEY) {
-      setIsSubmitting(false);
-      setError("Error de configuración: Las llaves de Supabase no están definidas en las variables de entorno de Vercel.");
-      console.error("Faltan VITE_SUPABASE_URL o VITE_SUPABASE_ANON_KEY");
-      return;
-    }
-
     try {
+      // Acceso seguro a variables de entorno para evitar el error "Cannot read properties of undefined"
+      const env = (import.meta as any).env || {};
+      const SUPABASE_URL = env.VITE_SUPABASE_URL;
+      const SUPABASE_KEY = env.VITE_SUPABASE_ANON_KEY;
+
+      if (!SUPABASE_URL || !SUPABASE_KEY) {
+        throw new Error("Configuración incompleta: Asegúrese de que las variables VITE_SUPABASE_URL y VITE_SUPABASE_ANON_KEY estén configuradas en Vercel.");
+      }
+
       const response = await fetch(`${SUPABASE_URL}/rest/v1/contactos`, {
         method: 'POST',
         headers: {
@@ -55,8 +52,8 @@ const Contact: React.FC = () => {
           'Prefer': 'return=minimal'
         },
         body: JSON.stringify({
-          nombre: formData.name,      // Verifica que esta columna exista en Supabase
-          empresa: formData.company,  // Verifica que esta columna exista en Supabase
+          nombre: formData.name,      
+          empresa: formData.company,  
           email: formData.email,
           telefono: formData.phone,
           servicio: formData.service,
@@ -66,12 +63,12 @@ const Contact: React.FC = () => {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        console.error("Error de Supabase:", response.status, errorData);
+        console.error("Supabase Error:", response.status, errorData);
         
-        if (response.status === 401 || response.status === 403) {
-          throw new Error('Permiso denegado. Revisa las políticas RLS en Supabase.');
-        } else if (response.status === 400) {
-          throw new Error('Error de esquema. Revisa que los nombres de las columnas coincidan con los de la base de datos.');
+        if (response.status === 400) {
+          throw new Error('Error 400: Verifique que las columnas "nombre" y "empresa" existan en Supabase.');
+        } else if (response.status === 401 || response.status === 403) {
+          throw new Error('Error de permisos: Verifique la política RLS en Supabase.');
         } else {
           throw new Error(`Error del servidor (${response.status})`);
         }
@@ -80,8 +77,8 @@ const Contact: React.FC = () => {
       setSubmitted(true);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (err: any) {
-      console.error("Detalle del error:", err);
-      setError(err.message || "Hubo un problema al enviar su consulta. Por favor, intente nuevamente.");
+      console.error("Error en el envío:", err);
+      setError(err.message || "No se pudo enviar el mensaje. Intente nuevamente.");
     } finally {
       setIsSubmitting(false);
     }
@@ -89,17 +86,16 @@ const Contact: React.FC = () => {
 
   if (submitted) {
     return (
-      <div className="min-h-[70vh] flex flex-col items-center justify-center text-center px-4 animate-in fade-in duration-700">
-        <div className="w-24 h-24 bg-green-50 rounded-full flex items-center justify-center mb-6 shadow-sm">
+      <div className="min-h-[70vh] flex flex-col items-center justify-center text-center px-4 animate-in fade-in duration-500">
+        <div className="w-24 h-24 bg-green-50 rounded-full flex items-center justify-center mb-6">
           <CheckCircle className="text-green-500 w-12 h-12" />
         </div>
-        <h1 className="text-4xl font-black text-aisla-graphite mb-4">¡Mensaje Recibido!</h1>
-        <p className="text-gray-500 max-w-lg mb-8 text-lg leading-relaxed">
-          Gracias por contactar a <strong>AISLA-ZAR S.A.</strong><br/>
-          Nuestro departamento de ingeniería comercial analizará su requerimiento y se pondrá en contacto a la brevedad.
+        <h1 className="text-4xl font-black text-aisla-graphite mb-4">¡Enviado!</h1>
+        <p className="text-gray-500 max-w-lg mb-8 text-lg">
+          Su consulta ha sido recibida con éxito. Nos contactaremos a la brevedad.
         </p>
         <Button onClick={() => setSubmitted(false)} variant="primary">
-          Realizar otra consulta
+          Volver al formulario
         </Button>
       </div>
     );
@@ -108,126 +104,86 @@ const Contact: React.FC = () => {
   return (
     <>
       <div className="bg-aisla-graphite py-20 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-aisla-red/5 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none"></div>
         <div className="container mx-auto px-4 text-center relative z-10">
-          <span className="text-aisla-red font-bold uppercase tracking-[0.2em] text-xs mb-3 block">
-            Canales de Comunicación
-          </span>
+          <span className="text-aisla-red font-bold uppercase tracking-[0.2em] text-xs mb-3 block">Comercial</span>
           <h1 className="text-4xl md:text-6xl font-black text-white mb-4">Contacto</h1>
-          <p className="text-xl text-gray-400 font-light max-w-2xl mx-auto">
-            Estamos a disposición para cotizar su próximo proyecto o responder consultas técnicas.
-          </p>
         </div>
       </div>
 
-      <Section className="relative">
+      <Section>
         <div className="flex flex-col lg:flex-row gap-16">
-          <div className="lg:w-1/3 space-y-10">
-            <div>
-              <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-8 border-b border-gray-100 pb-4">
-                Datos de Contacto
-              </h3>
-              <ul className="space-y-8">
-                <li className="flex items-start group">
-                  <div className="bg-white border border-gray-100 p-4 rounded-2xl mr-5 text-aisla-red shadow-sm group-hover:shadow-md group-hover:border-aisla-red/30 transition-all duration-300">
-                    <MapPin size={24} strokeWidth={1.5} />
-                  </div>
-                  <div>
-                    <strong className="block text-aisla-graphite text-lg mb-1">Base Operativa</strong>
-                    <span className="text-gray-500 text-sm leading-relaxed block">{COMPANY_INFO.operativeAddress}</span>
-                    <span className="text-gray-400 text-xs mt-1 block">Zárate, Buenos Aires</span>
-                  </div>
+          <div className="lg:w-1/3 space-y-8">
+            <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm">
+              <h3 className="font-bold text-xl mb-6">Vías de contacto</h3>
+              <ul className="space-y-6">
+                <li className="flex items-start">
+                  <MapPin className="text-aisla-red mr-4 mt-1" size={20} />
+                  <span className="text-sm text-gray-600">{COMPANY_INFO.operativeAddress}</span>
                 </li>
-                <li className="flex items-start group">
-                  <div className="bg-white border border-gray-100 p-4 rounded-2xl mr-5 text-aisla-red shadow-sm group-hover:shadow-md group-hover:border-aisla-red/30 transition-all duration-300">
-                    <Phone size={24} strokeWidth={1.5} />
-                  </div>
-                  <div>
-                    <strong className="block text-aisla-graphite text-lg mb-1">Teléfonos</strong>
-                    <a href={`tel:${COMPANY_INFO.phone.replace(/[^0-9]/g, '')}`} className="text-gray-500 text-sm hover:text-aisla-red transition-colors block font-medium">
-                      {COMPANY_INFO.phone}
-                    </a>
-                  </div>
+                <li className="flex items-center">
+                  <Phone className="text-aisla-red mr-4" size={20} />
+                  <a href={`tel:${COMPANY_INFO.phone}`} className="text-sm text-gray-600 hover:text-aisla-red font-medium">{COMPANY_INFO.phone}</a>
                 </li>
-                <li className="flex items-start group">
-                  <div className="bg-white border border-gray-100 p-4 rounded-2xl mr-5 text-aisla-red shadow-sm group-hover:shadow-md group-hover:border-aisla-red/30 transition-all duration-300">
-                    <Mail size={24} strokeWidth={1.5} />
-                  </div>
-                  <div>
-                    <strong className="block text-aisla-graphite text-lg mb-1">Email Comercial</strong>
-                    <a href={`mailto:${COMPANY_INFO.email}`} className="text-gray-500 text-sm hover:text-aisla-red transition-colors block font-medium">
-                      {COMPANY_INFO.email}
-                    </a>
-                  </div>
+                <li className="flex items-center">
+                  <Mail className="text-aisla-red mr-4" size={20} />
+                  <a href={`mailto:${COMPANY_INFO.email}`} className="text-sm text-gray-600 hover:text-aisla-red font-medium">{COMPANY_INFO.email}</a>
                 </li>
               </ul>
-            </div>
-            <div className="bg-aisla-graphite p-8 rounded-3xl text-white">
-              <h4 className="font-bold text-xl mb-3">Cobertura Nacional</h4>
-              <p className="text-sm text-gray-300 leading-relaxed">
-                Contamos con logística propia para movilizarnos a cualquier punto del país, asegurando el cumplimiento de los cronogramas.
-              </p>
             </div>
           </div>
 
           <div className="lg:w-2/3">
-            <div className="bg-white p-8 md:p-12 shadow-2xl rounded-3xl border border-gray-100">
-              <div className="mb-10">
-                <h3 className="text-3xl font-bold text-aisla-graphite mb-2">Solicitar Cotización</h3>
-                <p className="text-gray-500">Complete el formulario y un asesor técnico se comunicará con usted.</p>
-              </div>
-
+            <div className="bg-white p-8 md:p-12 shadow-2xl rounded-3xl border border-gray-50 relative overflow-hidden">
+              <h2 className="text-2xl font-bold mb-8">Solicitar presupuesto</h2>
+              
               {error && (
-                <div className="mb-6 p-4 bg-red-50 border border-red-100 text-red-600 rounded-xl flex items-start gap-3">
+                <div className="mb-8 p-4 bg-red-50 border border-red-100 text-red-600 rounded-xl flex items-start gap-3 text-sm animate-in slide-in-from-top-2">
                   <AlertTriangle className="flex-shrink-0 mt-0.5" size={18} />
-                  <div className="text-sm font-medium">{error}</div>
+                  <p>{error}</p>
                 </div>
               )}
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Nombre Completo *</label>
-                    <input type="text" name="name" required placeholder="Ej: Juan Pérez" value={formData.name} onChange={handleChange} className="w-full px-4 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-aisla-red/20 focus:border-aisla-red outline-none transition-all" />
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-gray-400 uppercase ml-1">Nombre Completo *</label>
+                    <input type="text" name="name" required placeholder="Ej: Juan Pérez" value={formData.name} onChange={handleChange} className="w-full px-4 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-aisla-red/20 outline-none transition-all" />
                   </div>
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Empresa *</label>
-                    <input type="text" name="company" required placeholder="Ej: Tech S.A." value={formData.company} onChange={handleChange} className="w-full px-4 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-aisla-red/20 focus:border-aisla-red outline-none transition-all" />
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-gray-400 uppercase ml-1">Empresa *</label>
+                    <input type="text" name="company" required placeholder="Ej: Tech S.A." value={formData.company} onChange={handleChange} className="w-full px-4 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-aisla-red/20 outline-none transition-all" />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Email *</label>
-                    <input type="email" name="email" required placeholder="nombre@empresa.com" value={formData.email} onChange={handleChange} className="w-full px-4 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-aisla-red/20 focus:border-aisla-red outline-none transition-all" />
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-gray-400 uppercase ml-1">Email *</label>
+                    <input type="email" name="email" required placeholder="correo@empresa.com" value={formData.email} onChange={handleChange} className="w-full px-4 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-aisla-red/20 outline-none transition-all" />
                   </div>
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Teléfono</label>
-                    <input type="tel" name="phone" placeholder="+54 ..." value={formData.phone} onChange={handleChange} className="w-full px-4 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-aisla-red/20 focus:border-aisla-red outline-none transition-all" />
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-gray-400 uppercase ml-1">Teléfono</label>
+                    <input type="tel" name="phone" placeholder="Cód. Área + Número" value={formData.phone} onChange={handleChange} className="w-full px-4 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-aisla-red/20 outline-none transition-all" />
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Servicio de Interés</label>
-                  <select name="service" value={formData.service} onChange={handleChange} className="w-full px-4 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-aisla-red/20 focus:border-aisla-red outline-none transition-all appearance-none cursor-pointer">
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-gray-400 uppercase ml-1">Servicio</label>
+                  <select name="service" value={formData.service} onChange={handleChange} className="w-full px-4 py-4 bg-gray-50 border border-gray-200 rounded-xl outline-none transition-all cursor-pointer">
                     <option value="general">Consulta General</option>
                     <option value="aislacion">Aislación Térmica</option>
                     <option value="andamios">Andamios</option>
                     <option value="tracing">Tracing Eléctrico</option>
-                    <option value="poliuretano">Poliuretano</option>
                   </select>
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Mensaje *</label>
-                  <textarea name="message" rows={4} required placeholder="Detalle su necesidad..." value={formData.message} onChange={handleChange} className="w-full px-4 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-aisla-red/20 focus:border-aisla-red outline-none transition-all resize-none"></textarea>
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-gray-400 uppercase ml-1">Mensaje *</label>
+                  <textarea name="message" rows={4} required placeholder="Describa su requerimiento técnica..." value={formData.message} onChange={handleChange} className="w-full px-4 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-aisla-red/20 outline-none transition-all resize-none"></textarea>
                 </div>
 
-                <div className="pt-4">
-                  <Button type="submit" variant="primary" fullWidth className={`h-14 ${isSubmitting ? 'opacity-70' : ''}`} disabled={isSubmitting}>
-                    {isSubmitting ? 'Enviando...' : 'Enviar Consulta'}
-                  </Button>
-                </div>
+                <Button type="submit" variant="primary" fullWidth disabled={isSubmitting} className="h-14">
+                  {isSubmitting ? 'Procesando envío...' : 'Enviar Consulta'}
+                </Button>
               </form>
             </div>
           </div>
