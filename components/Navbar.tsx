@@ -66,7 +66,7 @@ const Navbar: React.FC = () => {
             {/* Logo */}
             <Link to="/" className="flex items-center group mr-12">
               <img 
-                src="https://res.cloudinary.com/dbk68wsnu/image/upload/v1770492910/Logo_Aisla_Zar_nx9yu2.png" 
+                src="https://res.cloudinary.com/dbk68wsnu/image/upload/v1771638010/Nuevo_logo_aisla_zar_vv8dhq.png" 
                 alt="AISLA-ZAR S.A." 
                 className="h-[52px] md:h-[72px] w-auto object-contain"
               />

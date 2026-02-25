@@ -22,7 +22,6 @@ import { NavItem, ServiceDetail, Differential, Industry } from './types';
 export const COMPANY_INFO = {
   name: "AISLA-ZAR S.A.",
   slogan: "Soluciones integrales de aislaciones térmicas para las grandes industrias.",
-  address: "Av. Antártida Argentina N° 2535, Zárate, Provincia de Buenos Aires.",
   operativeAddress: "Camino a Parque Industrial Km 4.1, Zárate, Provincia de Buenos Aires.",
   phone: "11-4992 7224",
   email: "ventas@aisla-zar.com",
@@ -76,7 +75,7 @@ export const SERVICES: ServiceDetail[] = [
     title: "Tracing Eléctrico",
     description: "Diseñamos e implementamos sistemas de tracing eléctrico para el control térmico de procesos industriales, garantizando la estabilidad de temperatura en cañerías, válvulas, equipos y tanques, incluso en condiciones ambientales exigentes. Nuestras soluciones previenen el congelamiento, la cristalización y las pérdidas de fluidez. Ofrecemos un servicio integral que abarca ingeniería, suministro, instalación y puesta en marcha, adaptado a industrias como Oil & Gas, química, alimentos y minería.",
     icon: Zap,
-    image: "https://res.cloudinary.com/dbk68wsnu/image/upload/v1770594471/tracing_AI_e7gggm.png",
+    image: "https://res.cloudinary.com/dbk68wsnu/image/upload/v1771979865/tracing_electrico_lmypdo.jpg",
     items: [
       "Ingeniería, Suministro e Instalación Integral",
       "Cintas calefactoras autorregulables",

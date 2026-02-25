@@ -13,9 +13,9 @@ const Home: React.FC = () => {
     {
       id: 1,
       title: "Planta de Biodiesel",
-      location: "Santa Fe, Argentina",
+      location: "Villa María, Córdoba. Aislación térmica de calor desde los orígenes de la planta",
       category: "Aislación Térmica",
-      image: "https://res.cloudinary.com/dbk68wsnu/image/upload/v1770578744/RS-2-aislaciones-termicas-biodiesel_dor1oe.png"
+      image: "https://res.cloudinary.com/dbk68wsnu/image/upload/v1771638820/Planta_biodisel_tokcsi.jpg"
     },
     {
       id: 2,
@@ -27,31 +27,31 @@ const Home: React.FC = () => {
     {
       id: 3,
       title: "Revestimiento Aislante de Tanque",
-      location: "Campana, Buenos Aires",
+      location: "AISLACIÓN DE TANQUE SISTERNA SOBRE CAMION, VILLA MARIA, CORDOBA",
       category: "Aislación Térmica",
       image: "https://res.cloudinary.com/dbk68wsnu/image/upload/v1770809431/Camion_1_apu4li.jpg"
     },
     {
       id: 4,
       title: "Sistema de Tracing",
-      location: "Vaca Muerta, Neuquén",
+      location: "",
       category: "Tracing Eléctrico",
-      image: "https://res.cloudinary.com/dbk68wsnu/image/upload/v1770594471/tracing_AI_e7gggm.png"
+      image: "https://res.cloudinary.com/dbk68wsnu/image/upload/v1771979865/tracing_electrico_lmypdo.jpg"
     },
     {
       id: 5,
       title: "Aplicación de Poliuretano Spray",
-      location: "Zárate, Buenos Aires",
+      location: "APLICACIÓN SPRAY DE POLIURETANO EN TECHO",
       category: "Poliuretano Expandido",
-      image: "https://res.cloudinary.com/dbk68wsnu/image/upload/v1770814447/Poliuretano_2_utcmo8.jpg",
+      image: "https://res.cloudinary.com/dbk68wsnu/image/upload/v1771639067/poliuretano_en_techo_guccnh.jpg",
       video: "https://res.cloudinary.com/dbk68wsnu/video/upload/v1770818295/Poliuretano_video_1_bgmvx6.mp4"
     },
     {
       id: 6,
-      title: "Revestimiento de Tanque",
-      location: "Córdoba, Argentina",
+      title: "Planta Cagnoli",
+      location: "Tandil, Bs.As. Aislación térmica cañerías de frío con inyección de poliuretano",
       category: "Aislación Térmica",
-      image: "https://res.cloudinary.com/dbk68wsnu/image/upload/v1770820943/Aislaciones_5_yadcju.png"
+      image: "https://res.cloudinary.com/dbk68wsnu/image/upload/v1771638888/planta_cagnoli_yv5lmp.jpg"
     }
   ];
 
@@ -123,7 +123,7 @@ const Home: React.FC = () => {
       <Section background="gray" className="pt-12">
         <div className="flex flex-col md:flex-row justify-between items-end mb-12">
           <div>
-            <span className="text-aisla-red font-bold uppercase tracking-widest text-sm">Nuestra Expertise</span>
+            <span className="text-aisla-red font-bold uppercase tracking-widest text-sm">Nuestro Expertise</span>
             <h2 className="text-3xl md:text-4xl font-bold text-aisla-graphite mt-2">Servicios Industriales</h2>
           </div>
           <Link to="/servicios" className="hidden md:flex items-center text-aisla-red font-bold uppercase text-sm tracking-wide hover:underline mt-4 md:mt-0">
@@ -132,32 +132,43 @@ const Home: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {SERVICES.map((service, index) => (
-            <Link key={index} to="/servicios" className="group block bg-white h-full shadow-sm hover:shadow-lg transition-shadow duration-300 border border-gray-100 rounded-2xl overflow-hidden">
-              <div className="h-48 overflow-hidden relative">
-                <img 
-                  src={service.image} 
-                  alt={service.title} 
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-aisla-black/40 group-hover:bg-aisla-black/20 transition-colors"></div>
-                <div className="absolute bottom-4 right-4 bg-white p-2 rounded-lg shadow-md">
-                   <service.icon className="text-aisla-red" size={24} />
+          {SERVICES.map((service, index) => {
+            // Apply custom image overrides only in this section
+            let displayImage = service.image;
+
+            if (service.title === "Aislación Térmica Industrial") {
+              displayImage = "https://res.cloudinary.com/dbk68wsnu/image/upload/v1771638498/AISLACION_TERMICA_INDUSTRIAL_owah8i.jpg";
+            } else if (service.title === "Aplicación de Poliuretano") {
+              displayImage = "https://res.cloudinary.com/dbk68wsnu/image/upload/v1771638669/POLIURETANO_dhq644.jpg";
+            }
+
+            return (
+              <Link key={index} to="/servicios" className="group block bg-white h-full shadow-sm hover:shadow-lg transition-shadow duration-300 border border-gray-100 rounded-2xl overflow-hidden">
+                <div className="h-48 overflow-hidden relative">
+                  <img 
+                    src={displayImage} 
+                    alt={service.title} 
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-aisla-black/40 group-hover:bg-aisla-black/20 transition-colors"></div>
+                  <div className="absolute bottom-4 right-4 bg-white p-2 rounded-lg shadow-md">
+                    <service.icon className="text-aisla-red" size={24} />
+                  </div>
                 </div>
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-aisla-graphite mb-3 group-hover:text-aisla-red transition-colors">
-                  {service.title}
-                </h3>
-                <p className="text-sm text-gray-600 mb-4 line-clamp-3 leading-relaxed">
-                  {service.description}
-                </p>
-                <span className="text-xs font-bold uppercase tracking-wider text-aisla-gray flex items-center group-hover:translate-x-1 transition-transform">
-                  Más información <ChevronRight size={14} className="ml-1" />
-                </span>
-              </div>
-            </Link>
-          ))}
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-aisla-graphite mb-3 group-hover:text-aisla-red transition-colors">
+                    {service.title}
+                  </h3>
+                  <p className="text-sm text-gray-600 mb-4 line-clamp-3 leading-relaxed">
+                    {service.description}
+                  </p>
+                  <span className="text-xs font-bold uppercase tracking-wider text-aisla-gray flex items-center group-hover:translate-x-1 transition-transform">
+                    Más información <ChevronRight size={14} className="ml-1" />
+                  </span>
+                </div>
+              </Link>
+            );
+          })}
         </div>
         <div className="mt-8 md:hidden text-center">
           <Button to="/servicios" variant="outline" fullWidth>Ver todos los servicios</Button>
@@ -227,10 +238,12 @@ const Home: React.FC = () => {
                   <h3 className="text-white text-xl font-bold leading-tight mb-1">
                     {project.title}
                   </h3>
-                  <p className="text-gray-300 text-sm flex items-center mt-1">
-                    <span className="w-1.5 h-1.5 bg-gray-400 rounded-full mr-2"></span>
-                    {project.location}
-                  </p>
+                  {project.location && (
+                    <p className="text-gray-300 text-sm flex items-start mt-1">
+                      <span className="w-1.5 h-1.5 bg-gray-400 rounded-full mr-2 mt-1.5 flex-shrink-0"></span>
+                      <span>{project.location}</span>
+                    </p>
+                  )}
                 </div>
               </div>
 

@@ -127,7 +127,7 @@ const Services: React.FC = () => {
                     </div>
                     
                     <h3 className="font-bold text-aisla-graphite mb-4 md:mb-6 flex items-center text-xs md:text-sm uppercase tracking-wide">
-                       Capacidades Operativas
+                       {service.title === "Aislación Térmica Industrial" ? "Tipos de aislantes térmicos y recubrimientos" : "Capacidades Operativas"}
                     </h3>
                     
                     <div className="grid grid-cols-1 gap-y-3 md:gap-y-4 md:gap-x-8">

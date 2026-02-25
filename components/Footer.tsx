@@ -15,11 +15,11 @@ const Footer: React.FC = () => {
           <div>
             <div className="flex flex-col mb-6 bg-transparent p-0 shadow-none border-none">
               <img 
-                src="https://res.cloudinary.com/dbk68wsnu/image/upload/v1770492910/Logo_Aisla_Zar_nx9yu2.png" 
+                src="https://res.cloudinary.com/dbk68wsnu/image/upload/v1771639525/logo_aislazar_sin_fondo_rwqs3n.png" 
                 alt="AISLA-ZAR S.A." 
                 className="h-16 w-auto object-contain mb-4 self-start bg-transparent"
               />
-              <span className="text-xs font-bold text-aisla-gray tracking-[0.3em] uppercase leading-none mt-1 ml-1">
+              <span className="text-xs font-bold text-gray-400 tracking-[0.3em] uppercase leading-none mt-1 ml-1">
                 S.A.
               </span>
             </div>
@@ -31,7 +31,7 @@ const Footer: React.FC = () => {
                 href={SOCIAL_LINKS.linkedin} 
                 target={SOCIAL_LINKS.linkedin === "#" ? "_self" : "_blank"}
                 rel="noopener noreferrer"
-                className="bg-gray-800 p-2 hover:bg-aisla-red transition-colors duration-300"
+                className="bg-gray-800 text-white p-2 rounded-lg hover:bg-aisla-red hover:text-white transition-colors duration-300"
                 aria-label="LinkedIn"
               >
                 <Linkedin size={18} />
@@ -40,7 +40,7 @@ const Footer: React.FC = () => {
                 href={SOCIAL_LINKS.facebook} 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="bg-gray-800 p-2 hover:bg-aisla-red transition-colors duration-300"
+                className="bg-gray-800 text-white p-2 rounded-lg hover:bg-aisla-red hover:text-white transition-colors duration-300"
                 aria-label="Facebook"
               >
                 <Facebook size={18} />
@@ -49,7 +49,7 @@ const Footer: React.FC = () => {
                 href={SOCIAL_LINKS.instagram} 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="bg-gray-800 p-2 hover:bg-aisla-red transition-colors duration-300"
+                className="bg-gray-800 text-white p-2 rounded-lg hover:bg-aisla-red hover:text-white transition-colors duration-300"
                 aria-label="Instagram"
               >
                 <Instagram size={18} />
@@ -59,7 +59,7 @@ const Footer: React.FC = () => {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-lg font-bold uppercase tracking-wider mb-6 border-b border-gray-700 pb-2 inline-block">
+            <h3 className="text-lg font-bold uppercase tracking-wider mb-6 border-b border-gray-700 pb-2 inline-block text-white">
               Navegación
             </h3>
             <ul className="space-y-3">
@@ -79,7 +79,7 @@ const Footer: React.FC = () => {
 
           {/* Services */}
           <div>
-            <h3 className="text-lg font-bold uppercase tracking-wider mb-6 border-b border-gray-700 pb-2 inline-block">
+            <h3 className="text-lg font-bold uppercase tracking-wider mb-6 border-b border-gray-700 pb-2 inline-block text-white">
               Servicios
             </h3>
             <ul className="space-y-3">
@@ -99,15 +99,14 @@ const Footer: React.FC = () => {
 
           {/* Contact Info */}
           <div>
-            <h3 className="text-lg font-bold uppercase tracking-wider mb-6 border-b border-gray-700 pb-2 inline-block">
+            <h3 className="text-lg font-bold uppercase tracking-wider mb-6 border-b border-gray-700 pb-2 inline-block text-white">
               Contacto
             </h3>
             <ul className="space-y-4">
               <li className="flex items-start text-sm text-gray-400">
                 <MapPin className="text-aisla-red mr-3 mt-1 flex-shrink-0" size={18} />
                 <span>
-                  <strong>Operativa:</strong> {COMPANY_INFO.operativeAddress}<br />
-                  <strong>Legal:</strong> {COMPANY_INFO.address}
+                  {COMPANY_INFO.operativeAddress}
                 </span>
               </li>
               <li className="flex items-center text-sm text-gray-400">
@@ -140,8 +139,8 @@ const Footer: React.FC = () => {
         <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500">
           <p>© {currentYear} {COMPANY_INFO.name} Todos los derechos reservados.</p>
           <div className="flex space-x-6 mt-4 md:mt-0">
-            <Link to="#" className="hover:text-white transition-colors">Política de Privacidad</Link>
-            <Link to="#" className="hover:text-white transition-colors">Términos y Condiciones</Link>
+            <Link to="#" className="hover:text-aisla-red transition-colors">Política de Privacidad</Link>
+            <Link to="#" className="hover:text-aisla-red transition-colors">Términos y Condiciones</Link>
           </div>
         </div>
       </div>
