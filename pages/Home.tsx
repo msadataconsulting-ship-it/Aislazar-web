@@ -58,7 +58,7 @@ const Home: React.FC = () => {
   return (
     <>
       {/* Hero Section */}
-      <div className="relative h-[90vh] min-h-[600px] flex items-center bg-gray-900 overflow-hidden">
+      <div className="relative h-[90vh] min-h-[700px] flex items-center bg-gray-900 overflow-hidden pb-32">
         {/* Background Image with Overlay */}
         <div className="absolute inset-0 z-0">
           <img 
