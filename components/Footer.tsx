@@ -7,7 +7,7 @@ const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-aisla-graphite text-white pt-16 pb-8 border-t-4 border-aisla-red">
+    <footer className="bg-[#1D1719] text-white pt-16 pb-8 border-t-4 border-aisla-red">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
           
@@ -15,13 +15,10 @@ const Footer: React.FC = () => {
           <div>
             <div className="flex flex-col mb-6 bg-transparent p-0 shadow-none border-none">
               <img 
-                src="https://res.cloudinary.com/dbk68wsnu/image/upload/v1771639525/logo_aislazar_sin_fondo_rwqs3n.png" 
-                alt="AISLA-ZAR S.A." 
-                className="h-16 w-auto object-contain mb-4 self-start bg-transparent"
+                src="https://res.cloudinary.com/dbk68wsnu/image/upload/v1772505607/logo_aisla_zar_3_k5lbgu.png" 
+                alt="AISLA-ZAR" 
+                className="h-32 w-auto object-contain mb-4 self-start bg-transparent"
               />
-              <span className="text-xs font-bold text-gray-400 tracking-[0.3em] uppercase leading-none mt-1 ml-1">
-                S.A.
-              </span>
             </div>
             <p className="text-gray-400 text-sm leading-relaxed mb-6">
               Empresa líder en servicios de aislación térmica industrial, andamios y mantenimiento. Más de 20 años brindando soluciones integrales a las industrias más exigentes del país.

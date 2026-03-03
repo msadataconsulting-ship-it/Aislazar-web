@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import Section from '../components/Section';
 import Button from '../components/Button';
 import { SERVICES } from '../constants';
@@ -20,6 +21,18 @@ const Services: React.FC = () => {
       });
     }
   };
+
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.replace('#', '');
+      // Small delay to ensure DOM is ready and layout is stable
+      setTimeout(() => {
+        scrollToService(id);
+      }, 100);
+    }
+  }, [location]);
 
   return (
     <>
@@ -89,7 +102,7 @@ const Services: React.FC = () => {
                       <img 
                         src={service.detailImage || service.image} 
                         alt={service.title} 
-                        className="w-full h-[250px] md:h-[500px] object-cover transition-transform duration-700 group-hover:scale-105"
+                        className={`w-full h-[250px] md:h-[500px] transition-transform duration-700 group-hover:scale-105 ${service.title === "Aislación Térmica Industrial" ? "object-contain bg-gray-900" : "object-cover"}`}
                       />
                       {/* Overlay Gradient */}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>

@@ -136,14 +136,12 @@ const Home: React.FC = () => {
             // Apply custom image overrides only in this section
             let displayImage = service.image;
 
-            if (service.title === "Aislación Térmica Industrial") {
-              displayImage = "https://res.cloudinary.com/dbk68wsnu/image/upload/v1771638498/AISLACION_TERMICA_INDUSTRIAL_owah8i.jpg";
-            } else if (service.title === "Aplicación de Poliuretano") {
+            if (service.title === "Aplicación de Poliuretano") {
               displayImage = "https://res.cloudinary.com/dbk68wsnu/image/upload/v1771638669/POLIURETANO_dhq644.jpg";
             }
 
             return (
-              <Link key={index} to="/servicios" className="group block bg-white h-full shadow-sm hover:shadow-lg transition-shadow duration-300 border border-gray-100 rounded-2xl overflow-hidden">
+              <Link key={index} to={`/servicios#service-${index}`} className="group block bg-white h-full shadow-sm hover:shadow-lg transition-shadow duration-300 border border-gray-100 rounded-2xl overflow-hidden">
                 <div className="h-48 overflow-hidden relative">
                   <img 
                     src={displayImage} 
@@ -278,7 +276,7 @@ const Home: React.FC = () => {
                    key={`l1-${index}`} 
                    src={logo} 
                    alt={`Client ${index + 1}`}
-                   className="h-12 md:h-14 w-auto object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300" 
+                   className="h-10 md:h-12 w-auto object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300" 
                  />
               ))}
             </div>
@@ -289,7 +287,7 @@ const Home: React.FC = () => {
                    key={`l2-${index}`} 
                    src={logo} 
                    alt={`Client ${index + 1}`}
-                   className="h-12 md:h-14 w-auto object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300" 
+                   className="h-10 md:h-12 w-auto object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300" 
                  />
               ))}
             </div>
