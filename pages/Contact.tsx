@@ -46,12 +46,12 @@ const Contact: React.FC = () => {
         .from('contactos')
         .insert([
           {
-            name: formData.name,
-            company: formData.company,
+            nombre: formData.name,
+            empresa: formData.company,
             email: formData.email,
-            phone: formData.phone,
-            service: formData.service,
-            message: formData.message,
+            telefono: formData.phone,
+            servicio: formData.service,
+            mensaje: formData.message,
             created_at: new Date().toISOString(),
           },
         ]);
