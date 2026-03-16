@@ -16,6 +16,8 @@ import {
   ChevronDown 
 } from 'lucide-react';
 
+import { supabase } from '../supabase';
+
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -28,20 +30,42 @@ const Contact: React.FC = () => {
 
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    // Simulate API call
-    setTimeout(() => {
+    setError(null);
+
+    try {
+      const { error: supabaseError } = await supabase
+        .from('contacts')
+        .insert([
+          {
+            name: formData.name,
+            company: formData.company,
+            email: formData.email,
+            phone: formData.phone,
+            service: formData.service,
+            message: formData.message,
+            created_at: new Date().toISOString(),
+          },
+        ]);
+
+      if (supabaseError) throw supabaseError;
+
       setIsSubmitting(false);
       setSubmitted(true);
       window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, 1500);
+    } catch (err: any) {
+      console.error('Error saving to Supabase:', err);
+      setError('Hubo un error al enviar el mensaje. Por favor, intente nuevamente.');
+      setIsSubmitting(false);
+    }
   };
 
   if (submitted) {
@@ -164,6 +188,11 @@ const Contact: React.FC = () => {
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-6">
+                {error && (
+                  <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-6 rounded-r-xl">
+                    <p className="text-red-700 text-sm font-medium">{error}</p>
+                  </div>
+                )}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Name Input */}
                   <div className="space-y-2">
