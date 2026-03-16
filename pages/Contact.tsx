@@ -43,7 +43,7 @@ const Contact: React.FC = () => {
 
     try {
       const { error: supabaseError } = await supabase
-        .from('contacts')
+        .from('contactos')
         .insert([
           {
             name: formData.name,
