@@ -42,6 +42,7 @@ const Contact: React.FC = () => {
     setError(null);
 
     try {
+      // 1. Save to Supabase (Database)
       const { error: supabaseError } = await supabase
         .from('contactos')
         .insert([
@@ -56,14 +57,41 @@ const Contact: React.FC = () => {
           },
         ]);
 
-      if (supabaseError) throw supabaseError;
+      if (supabaseError) {
+        console.error('Error saving to Supabase:', supabaseError);
+        // We continue even if Supabase fails, to try sending the email
+      }
+
+      // 2. Send Email via Backend API
+      const emailResponse = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          nombre: formData.name,
+          empresa: formData.company,
+          email: formData.email,
+          telefono: formData.phone,
+          servicio: formData.service,
+          mensaje: formData.message,
+        }),
+      });
+
+      if (!emailResponse.ok) {
+        const emailError = await emailResponse.json();
+        console.error('Error sending email:', emailError);
+        // If email fails, we show an error even if Supabase succeeded
+        // because the user specifically requested the email functionality.
+        throw new Error(emailError.error || 'Error al enviar el email');
+      }
 
       setIsSubmitting(false);
       setSubmitted(true);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (err: any) {
-      console.error('Error saving to Supabase:', err);
-      setError('Hubo un error al enviar el mensaje. Por favor, intente nuevamente.');
+      console.error('Submit error:', err);
+      setError(err.message || 'Hubo un error al enviar el mensaje. Por favor, intente nuevamente.');
       setIsSubmitting(false);
     }
   };

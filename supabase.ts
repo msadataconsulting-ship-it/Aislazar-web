@@ -2,8 +2,8 @@ import { createClient } from '@supabase/supabase-js';
 
 // Fallback to empty string to avoid 'process is not defined' if define fails, 
 // but Vite 'define' should handle this.
-const supabaseUrl = (process.env.SUPABASE_URL) || (import.meta.env.VITE_SUPABASE_URL) || 'https://placeholder.supabase.co';
-const supabaseAnonKey = (process.env.SUPABASE_ANON_KEY) || (import.meta.env.VITE_SUPABASE_ANON_KEY) || 'placeholder';
+const supabaseUrl = (typeof process !== 'undefined' && process.env?.SUPABASE_URL) || 'https://placeholder.supabase.co';
+const supabaseAnonKey = (typeof process !== 'undefined' && process.env?.SUPABASE_ANON_KEY) || 'placeholder';
 
 const isPlaceholder = supabaseUrl === 'https://placeholder.supabase.co' || supabaseAnonKey === 'placeholder';
 
